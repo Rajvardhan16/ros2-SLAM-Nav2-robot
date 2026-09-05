@@ -1,0 +1,36 @@
+# To Start Mapping
+
+cd ~/ros2_ws
+colcon build --packages-select four_wheel
+source install/setup.bash
+
+1. To Start Gazebo :
+> cd ~/ros2_ws
+> source install/setup.bash
+> ros2 launch four_wheel gazebo.launch.py
+
+2. To Start Slam :
+> cd ~/ros2_ws
+> source install/setup.bash
+> ros2 launch four_wheel slam.launch.py
+
+3. To Start Rviz (if needed) :
+> source ~/ros2_ws/install/setup.bash
+> rviz2
+
+( Fixed Frame → map
+  Add → By topic → /map (Map display)
+  If it shows "No map received," open the Map display's QoS settings and              set              Reliability    =Reliable, Durability = Transient Local )
+  
+4. To Operate the Robot :
+> source ~/ros2_ws/install/setup.bash
+> ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true -p frame_id:=base_link -r cmd_vel:=/diff_drive_controller/cmd_vel
+
+5. To Save the Map :
+> ros2 run nav2_map_server map_saver_cli -f ~/ros2_ws/maps/my_map
+
+6. To Start Nav2 :
+> cd ~/ros2_ws
+> source install/setup.bash
+> ros2 launch four_wheel navigation.launch.py
+  

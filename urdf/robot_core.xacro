@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find four_wheel)/urdf/inertial_macros.xacro"/>
+
+  <material name="white"><color rgba="1 1 1 1"/></material>
+  <material name="black"><color rgba="0 0 0 1"/></material>
+  <material name="orange"><color rgba="1 0.4 0 1"/></material>
+
+  <!-- ===================== BASE ===================== -->
+  <link name="base_link"></link>
+
+  <joint name="chassis_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="chassis"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <link name="chassis">
+    <visual>
+      <origin xyz="0.15 0 0.075"/>
+      <geometry><box size="0.4 0.3 0.15"/></geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="0.15 0 0.075"/>
+      <geometry><box size="0.4 0.3 0.15"/></geometry>
+    </collision>
+    <xacro:inertial_box mass="2.0" x="0.4" y="0.3" z="0.15">
+      <origin xyz="0.15 0 0.075" rpy="0 0 0"/>
+    </xacro:inertial_box>
+  </link>
+
+  <!-- ===================== WHEEL MACRO ===================== -->
+  <xacro:macro name="wheel" params="prefix x_pos y_pos">
+    <joint name="${prefix}_wheel_joint" type="continuous">
+      <parent link="chassis"/>
+      <child link="${prefix}_wheel"/>
+      <origin xyz="${x_pos} ${y_pos} 0" rpy="-${pi/2} 0 0"/>
+      <axis xyz="0 0 1"/>
+    </joint>
+
+    <link name="${prefix}_wheel">
+      <visual>
+        <geometry><cylinder radius="0.08" length="0.06"/></geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <geometry><cylinder radius="0.08" length="0.06"/></geometry>
+      </collision>
+      <xacro:inertial_cylinder mass="0.3" length="0.06" radius="0.08">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:inertial_cylinder>
+    </link>
+
+    <gazebo reference="${prefix}_wheel">
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- 4 wheels: front-left, front-right, rear-left, rear-right -->
+  <xacro:wheel prefix="front_left"  x_pos="0.25"  y_pos="0.175"/>
+  <xacro:wheel prefix="front_right" x_pos="0.25"  y_pos="-0.175"/>
+  <xacro:wheel prefix="rear_left"   x_pos="0.05"  y_pos="0.175"/>
+  <xacro:wheel prefix="rear_right"  x_pos="0.05"  y_pos="-0.175"/>
+
+  <gazebo reference="chassis">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+</robot>
