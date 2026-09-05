@@ -1,212 +1,185 @@
 # 🤖 ROS 2 SLAM & Nav2 Robot
 
-A ROS 2-based **four-wheel differential-drive mobile robot** implementing **LiDAR-based SLAM mapping and autonomous navigation using Nav2**.
+A ROS 2-based **four-wheel differential-drive mobile robot** implementing **LiDAR-based SLAM and autonomous navigation using Nav2**.
 
-This project demonstrates a complete mobile robotics workflow starting from robot modeling and simulation, followed by SLAM-based map generation and autonomous navigation using the ROS 2 Navigation Stack (Nav2).
+The project demonstrates a complete mobile robotics workflow:
+
+**Robot Modeling → Gazebo Simulation → LiDAR → SLAM → RViz → Teleoperation → Map Saving → Nav2 Autonomous Navigation**
 
 ---
 
 # 📌 Project Overview
 
-This project implements a four-wheel mobile robot in ROS 2 with a LiDAR sensor for environment perception.
+This project develops a four-wheel mobile robot using ROS 2.
 
-The robot is simulated in **Gazebo** and can be controlled manually using `teleop_twist_keyboard`. The LiDAR data is used with **SLAM Toolbox** to build a map of the environment.
+The robot is modeled using **URDF/Xacro**, simulated in **Gazebo**, equipped with a **LiDAR sensor**, and controlled using ROS 2 Control.
 
-After creating and saving a map, the same robot can use **Nav2** for autonomous navigation.
+During the mapping phase, the robot is manually operated using `teleop_twist_keyboard`. LiDAR data is processed by SLAM to generate an occupancy-grid map.
 
-The overall workflow is:
-
-```text
-Robot Model
-     │
-     ▼
-Gazebo Simulation
-     │
-     ▼
-LiDAR Sensor
-     │
-     ▼
-SLAM Toolbox
-     │
-     ▼
-Build Environment Map
-     │
-     ▼
-Save Map
-     │
-     ▼
-Nav2
-     │
-     ▼
-Autonomous Navigation
-```
+After the map is generated and saved, the robot can use **Nav2** for autonomous navigation.
 
 ---
 
 # 🎯 Objectives
 
-The main objectives of this project are:
-
-* Develop a four-wheel mobile robot using ROS 2.
-* Create the robot model using URDF/Xacro.
-* Simulate the robot in Gazebo.
+* Build a four-wheel mobile robot model in ROS 2.
+* Create the robot description using URDF/Xacro.
 * Integrate a LiDAR sensor.
-* Implement SLAM for environment mapping.
-* Visualize the generated map in RViz.
-* Control the robot using keyboard teleoperation.
-* Save the generated map for later use.
+* Simulate the robot in Gazebo.
+* Implement SLAM-based environment mapping.
+* Visualize the robot and map using RViz2.
+* Teleoperate the robot during mapping.
+* Save the generated map.
 * Configure Nav2 for autonomous navigation.
-* Test navigation using a previously generated map.
+* Test autonomous navigation using the generated map.
 
 ---
 
 # ✨ Features
 
-* 🤖 Four-wheel differential-drive mobile robot
-* 🌍 Gazebo simulation
-* 📡 LiDAR integration
-* 🗺️ SLAM mapping
-* 🧭 Nav2 autonomous navigation
-* 🎮 Keyboard teleoperation
-* 🖥️ RViz visualization
-* ⚙️ ROS 2 Control
-* 📐 URDF/Xacro robot description
-* 🎛️ Configurable controllers
-* 🗺️ Saved occupancy map
-* 🚀 Separate launch files for simulation, SLAM, and navigation
+* Four-wheel mobile robot
+* Differential-drive motion
+* LiDAR-based environment sensing
+* Gazebo simulation
+* SLAM mapping
+* RViz2 visualization
+* ROS 2 Control
+* Keyboard teleoperation
+* Map generation and saving
+* Nav2 autonomous navigation
+* Configurable robot controllers
+* Configurable SLAM parameters
+* Configurable Nav2 parameters
+* Saved occupancy map
 
 ---
 
 # 🏗️ System Architecture
 
 ```text
-                  ┌────────────────────┐
-                  │    Four-Wheel      │
-                  │   Mobile Robot     │
-                  └─────────┬──────────┘
-                            │
-                            ▼
-                  ┌────────────────────┐
-                  │      Gazebo        │
-                  │    Simulation      │
-                  └─────────┬──────────┘
-                            │
-                            ▼
-                  ┌────────────────────┐
-                  │       LiDAR        │
-                  │  Environment Scan  │
-                  └─────────┬──────────┘
-                            │
-                            ▼
-                  ┌────────────────────┐
-                  │    SLAM Toolbox    │
-                  │   Mapping System   │
-                  └─────────┬──────────┘
-                            │
-                            ▼
-                  ┌────────────────────┐
-                  │    Occupancy Map   │
-                  └─────────┬──────────┘
-                            │
-                            ▼
-                  ┌────────────────────┐
-                  │       Nav2         │
-                  │ Navigation Stack   │
-                  └─────────┬──────────┘
-                            │
-                            ▼
-                  ┌────────────────────┐
-                  │ Autonomous Robot   │
-                  │     Navigation     │
-                  └────────────────────┘
+                       ┌──────────────────────┐
+                       │    Four-Wheel Robot  │
+                       └──────────┬───────────┘
+                                  │
+                                  ▼
+                       ┌──────────────────────┐
+                       │       Gazebo         │
+                       │     Simulation       │
+                       └──────────┬───────────┘
+                                  │
+                                  ▼
+                       ┌──────────────────────┐
+                       │        LiDAR         │
+                       │   Environment Scan   │
+                       └──────────┬───────────┘
+                                  │
+                                  ▼
+                       ┌──────────────────────┐
+                       │    SLAM Toolbox      │
+                       │    Mapping System    │
+                       └──────────┬───────────┘
+                                  │
+                                  ▼
+                       ┌──────────────────────┐
+                       │      Occupancy       │
+                       │        Map           │
+                       └──────────┬───────────┘
+                                  │
+                                  ▼
+                       ┌──────────────────────┐
+                       │        Nav2          │
+                       │ Navigation Framework │
+                       └──────────┬───────────┘
+                                  │
+                                  ▼
+                       ┌──────────────────────┐
+                       │ Autonomous Navigation│
+                       └──────────────────────┘
 ```
 
 ---
 
-# 🔄 Complete Project Workflow
-
-The project is divided into two major stages.
-
-## Stage 1 — Mapping
+# 🔄 Complete Workflow
 
 ```text
-Gazebo
-  │
-  ▼
-Robot + LiDAR
-  │
-  ▼
-SLAM Toolbox
-  │
-  ▼
-Manual Teleoperation
-  │
-  ▼
-Explore Environment
-  │
-  ▼
-Generate Map
-  │
-  ▼
-Save Map
-```
+                    MAPPING PHASE
 
-## Stage 2 — Navigation
+        ┌────────────────────────────┐
+        │      Start Gazebo          │
+        └─────────────┬──────────────┘
+                      ▼
+        ┌────────────────────────────┐
+        │       Start SLAM           │
+        └─────────────┬──────────────┘
+                      ▼
+        ┌────────────────────────────┐
+        │          RViz2             │
+        │  Visualize Robot + /map    │
+        └─────────────┬──────────────┘
+                      ▼
+        ┌────────────────────────────┐
+        │       Teleoperate          │
+        │       the Robot            │
+        └─────────────┬──────────────┘
+                      ▼
+        ┌────────────────────────────┐
+        │       Generate Map         │
+        └─────────────┬──────────────┘
+                      ▼
+        ┌────────────────────────────┐
+        │         Save Map            │
+        └─────────────┬──────────────┘
+                      │
+                      ▼
+                 NAVIGATION
+                    PHASE
 
-```text
-Saved Map
-    │
-    ▼
-Nav2
-    │
-    ▼
-Localization
-    │
-    ▼
-Navigation Planning
-    │
-    ▼
-Controller
-    │
-    ▼
-Four-Wheel Robot
+        ┌────────────────────────────┐
+        │         Start Nav2         │
+        └─────────────┬──────────────┘
+                      ▼
+        ┌────────────────────────────┐
+        │     Localization +         │
+        │      Path Planning         │
+        └─────────────┬──────────────┘
+                      ▼
+        ┌────────────────────────────┐
+        │    Autonomous Navigation   │
+        └────────────────────────────┘
 ```
 
 ---
 
-# 🔧 Technologies Used
+# 🧰 Technologies
 
-| Technology        | Purpose                            |
-| ----------------- | ---------------------------------- |
-| **ROS 2**         | Robot middleware and communication |
-| **Gazebo**        | Robot simulation                   |
-| **SLAM Toolbox**  | Environment mapping                |
-| **Nav2**          | Autonomous navigation              |
-| **RViz2**         | Visualization                      |
-| **ROS 2 Control** | Robot control                      |
-| **LiDAR**         | Environment sensing                |
-| **URDF/Xacro**    | Robot modeling                     |
-| **Python**        | ROS 2 launch files                 |
-| **YAML**          | Configuration files                |
-| **SDF**           | Gazebo world                       |
+| Technology    | Role                   |
+| ------------- | ---------------------- |
+| ROS 2         | Robot middleware       |
+| Gazebo        | Simulation             |
+| SLAM Toolbox  | Mapping                |
+| Nav2          | Autonomous navigation  |
+| RViz2         | Visualization          |
+| ROS 2 Control | Robot control          |
+| LiDAR         | Environment perception |
+| URDF/Xacro    | Robot modeling         |
+| YAML          | Configuration          |
+| SDF           | Gazebo world           |
 
 ---
 
 # 📦 ROS 2 Package
 
-The repository contains the following ROS 2 package:
+The repository contains the ROS 2 package:
 
 ```text
 four_wheel
 ```
 
-The package contains the robot description, simulation environment, SLAM configuration, Nav2 configuration, controllers, launch files, and RViz configurations.
+The package contains the robot description, simulation, LiDAR, controllers, SLAM configuration, Nav2 configuration, RViz configurations, and launch files.
 
 ---
 
 # 📁 Project Structure
-
-The existing `four_wheel` package structure is preserved.
 
 ```text
 ros2-SLAM-Nav2-robot/
@@ -250,105 +223,111 @@ ros2-SLAM-Nav2-robot/
 
 ---
 
-# 🤖 Robot Description
+# 🤖 Robot Model
 
-The robot model is created using URDF/Xacro.
-
-The robot description contains:
+The robot is described using Xacro files located in:
 
 ```text
 urdf/
-├── inertial_macros.xacro
-├── lidar.xacro
-├── robot_core.xacro
-├── robot.urdf.xacro
-└── ros2_control.xacro
 ```
 
-### Main components
+### Robot description files
 
-**`robot.urdf.xacro`**
+```text
+robot.urdf.xacro
+robot_core.xacro
+ros2_control.xacro
+inertial_macros.xacro
+lidar.xacro
+```
 
-Main robot description.
-
-**`robot_core.xacro`**
-
-Core robot structure.
-
-**`ros2_control.xacro`**
-
-ROS 2 Control integration.
-
-**`lidar.xacro`**
-
-LiDAR sensor description.
-
-**`inertial_macros.xacro`**
-
-Reusable inertial properties/macros.
+The Xacro files define the robot structure, inertial properties, LiDAR, and ROS 2 Control integration.
 
 ---
 
 # 📡 LiDAR
 
-The robot includes a LiDAR sensor for environment perception.
-
-The LiDAR configuration is contained in:
+The LiDAR description is located at:
 
 ```text
 urdf/lidar.xacro
 ```
 
-The LiDAR provides the range measurements required by the SLAM system to understand the surrounding environment.
+The LiDAR provides environmental scan data used during SLAM mapping.
+
+The LiDAR allows the robot to detect surrounding walls and obstacles while moving through the simulated environment.
+
+---
+
+# ⚙️ ROS 2 Control
+
+The robot uses ROS 2 Control for its drive controller.
+
+The controller configuration is:
+
+```text
+config/my_controllers.yaml
+```
+
+The robot's ROS 2 Control interface is defined through:
+
+```text
+urdf/ros2_control.xacro
+```
+
+The teleoperation command publishes velocity commands to:
+
+```text
+/diff_drive_controller/cmd_vel
+```
 
 ---
 
 # 🌍 Gazebo Simulation
 
-The robot is simulated using Gazebo.
+The project includes a Gazebo simulation environment.
 
-The simulation environment is defined in:
+### World
 
 ```text
-worlds/
-└── empty_world.sdf
+worlds/empty_world.sdf
 ```
 
-The Gazebo launch file is:
+### Launch file
 
 ```text
 launch/gazebo.launch.py
 ```
 
+Gazebo provides the simulated robot, environment, sensors, and controllers.
+
 ---
 
-# 🗺️ SLAM Mapping
+# 🗺️ SLAM
 
-The project uses SLAM to create an occupancy map of the environment.
+SLAM is used to construct an occupancy-grid map while the robot explores the environment.
 
-The SLAM configuration is located in:
+### SLAM configuration
 
 ```text
 config/mapper_params_online_async.yaml
 ```
 
-The SLAM launch file is:
+### SLAM launch file
 
 ```text
 launch/slam.launch.py
 ```
 
-During mapping, the robot can be manually driven around the environment while the LiDAR observes surrounding obstacles.
-
-The resulting map can then be saved for navigation.
+The robot is manually driven during mapping so that the LiDAR can scan different areas of the environment.
 
 ---
 
-# 🖥️ RViz Visualization
+# 🖥️ RViz2 Configuration
 
-RViz2 can be used to visualize the robot and generated map.
+RViz2 is used to visualize the robot, TF frames, LiDAR information, and generated map.
 
-Available RViz configurations:
+The repository contains:
 
 ```text
 rviz/
@@ -356,50 +335,147 @@ rviz/
 └── rviz_config.rviz
 ```
 
-For SLAM visualization, set:
+---
+
+## Starting RViz2
+
+Open a new terminal:
+
+```bash
+source ~/ros2_ws/install/setup.bash
+```
+
+Then:
+
+```bash
+rviz2
+```
+
+---
+
+# ⚙️ RViz2 Settings for SLAM
+
+For the mapping stage, configure RViz2 as follows.
+
+## 1. Set Fixed Frame
+
+In the **Global Options** panel:
 
 ```text
 Fixed Frame → map
 ```
 
-Then add the map display using:
+The fixed frame should be:
 
 ```text
-Add → By topic → /map
+map
 ```
 
-If RViz reports:
+This is the required frame for viewing the generated SLAM map.
+
+---
+
+## 2. Add Map Display
+
+In RViz2:
+
+```text
+Add
+  ↓
+By topic
+  ↓
+/map
+```
+
+Select the `/map` topic to display the occupancy-grid map.
+
+The map should update as the robot moves through the environment.
+
+---
+
+## 3. Map QoS Settings
+
+If RViz2 displays:
 
 ```text
 No map received
 ```
 
-the Map display QoS settings may need:
+open the **Map display's QoS settings**.
+
+Set:
 
 ```text
-Reliability  = Reliable
-Durability   = Transient Local
+Reliability  → Reliable
+Durability   → Transient Local
 ```
 
-These settings are part of the project's current mapping workflow.
+These are the QoS settings specified in the project's current SLAM workflow.
+
+---
+
+## 4. Recommended RViz Displays
+
+For a useful mapping visualization, the RViz configuration can include:
+
+```text
+Map
+TF
+RobotModel
+LaserScan
+Odometry
+```
+
+The essential SLAM configuration documented for this project is:
+
+```text
+Fixed Frame → map
+Map Topic   → /map
+```
+
+with the Map QoS settings above when necessary.
 
 ---
 
 # 🎮 Robot Teleoperation
 
-During mapping, the robot can be operated using:
+During mapping, the robot is manually controlled using:
 
 ```bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true -p frame_id:=base_link -r cmd_vel:=/diff_drive_controller/cmd_vel
 ```
 
-This allows the robot to be manually driven through the environment while SLAM builds the map.
+The command publishes the robot velocity command to:
+
+```text
+/diff_drive_controller/cmd_vel
+```
+
+and uses:
+
+```text
+frame_id → base_link
+```
+
+The robot should be driven around the environment so that SLAM can observe the surroundings.
 
 ---
 
-# 🗺️ Saved Map
+# 💾 Saving the Map
 
-The repository includes a previously generated map:
+After sufficiently exploring the environment, save the generated map using:
+
+```bash
+ros2 run nav2_map_server map_saver_cli -f ~/ros2_ws/maps/my_map
+```
+
+The map is saved using the name:
+
+```text
+my_map
+```
+
+The repository also contains a saved map:
 
 ```text
 worlds/maps/
@@ -407,108 +483,68 @@ worlds/maps/
 └── my_map.yaml
 ```
 
-The map can also be generated and saved using:
-
-```bash
-ros2 run nav2_map_server map_saver_cli -f ~/ros2_ws/maps/my_map
-```
-
-This produces the map files required for subsequent navigation.
-
 ---
 
-# 🧭 Nav2 Navigation
+# 🧭 Nav2
 
-Nav2 is used for autonomous navigation using the generated map.
+Nav2 is used for autonomous navigation after the environment map has been created.
 
-The Nav2 configuration is located in:
+### Nav2 configuration
 
 ```text
 config/nav2_params.yaml
 ```
 
-The navigation launch file is:
+### Navigation launch file
 
 ```text
 launch/navigation.launch.py
 ```
 
-The navigation system can use the saved map to plan and execute robot movement through the environment.
+The navigation launch file starts the configured navigation system for the robot.
 
 ---
 
 # 🚀 Installation
 
-## Prerequisites
-
-Install and configure:
-
-* ROS 2
-* Gazebo
-* RViz2
-* SLAM Toolbox
-* Nav2
-* ROS 2 Control
-* `teleop_twist_keyboard`
-
----
-
-## Clone the Repository
-
-Create the workspace:
+## 1. Create Workspace
 
 ```bash
 mkdir -p ~/ros2_ws/src
 ```
 
-Navigate to the source directory:
+## 2. Clone Repository
 
 ```bash
 cd ~/ros2_ws/src
-```
-
-Clone the repository:
-
-```bash
 git clone https://github.com/Rajvardhan16/ros2-SLAM-Nav2-robot.git
 ```
 
----
-
-# 🔨 Build the Package
-
-Navigate to the workspace:
+## 3. Build Package
 
 ```bash
 cd ~/ros2_ws
-```
-
-Build the package:
-
-```bash
 colcon build --packages-select four_wheel
 ```
 
-Source the workspace:
+## 4. Source Workspace
 
 ```bash
 source install/setup.bash
 ```
 
-The build and source sequence follows the project's current setup.
+The project command sequence starts with building the `four_wheel` package and sourcing the workspace.
 
 ---
 
-# ▶️ Execution
+# ▶️ COMPLETE EXECUTION
 
-The complete system is operated in multiple terminals.
-
-The recommended workflow is:
+The project is operated in several terminals.
 
 ```text
 Terminal 1 → Gazebo
 Terminal 2 → SLAM
-Terminal 3 → RViz
+Terminal 3 → RViz2
 Terminal 4 → Teleoperation
 ```
 
@@ -520,9 +556,9 @@ Save Map → Start Nav2
 
 ---
 
-# 🟢 STEP 1 — Start Gazebo
+# 🟢 TERMINAL 1 — Start Gazebo
 
-Open **Terminal 1**:
+Open Terminal 1:
 
 ```bash
 cd ~/ros2_ws
@@ -544,21 +580,21 @@ Keep this terminal running.
 
 ---
 
-# 🗺️ STEP 2 — Start SLAM
+# 🗺️ TERMINAL 2 — Start SLAM
 
-Open **Terminal 2**:
+Open Terminal 2:
 
 ```bash
 cd ~/ros2_ws
 ```
 
-Source the workspace:
+Source:
 
 ```bash
 source install/setup.bash
 ```
 
-Start SLAM:
+Launch SLAM:
 
 ```bash
 ros2 launch four_wheel slam.launch.py
@@ -568,44 +604,54 @@ Keep this terminal running.
 
 ---
 
-# 🖥️ STEP 3 — Start RViz
+# 🖥️ TERMINAL 3 — Start RViz2
 
-If RViz is needed, open another terminal:
+Open Terminal 3:
 
 ```bash
 source ~/ros2_ws/install/setup.bash
 ```
 
-Then:
+Launch RViz:
 
 ```bash
 rviz2
 ```
 
-In RViz:
+Then configure RViz:
+
+### Global Options
 
 ```text
 Fixed Frame → map
 ```
 
-Add the map:
+### Map
 
 ```text
 Add → By topic → /map
 ```
 
-If the map is not received, configure the Map display QoS as:
+### Map QoS
+
+If:
 
 ```text
-Reliability  → Reliable
-Durability   → Transient Local
+No map received
+```
+
+set:
+
+```text
+Reliability → Reliable
+Durability → Transient Local
 ```
 
 ---
 
-# 🎮 STEP 4 — Operate the Robot
+# 🎮 TERMINAL 4 — Teleoperate Robot
 
-Open another terminal:
+Open Terminal 4:
 
 ```bash
 source ~/ros2_ws/install/setup.bash
@@ -617,43 +663,41 @@ Run:
 ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true -p frame_id:=base_link -r cmd_vel:=/diff_drive_controller/cmd_vel
 ```
 
-Use the keyboard to drive the robot around the environment.
+Drive the robot around the environment.
 
-Move the robot through different areas so that the LiDAR can observe the environment and SLAM can construct the map.
+Try to:
+
+* Cover the complete environment.
+* Move around corners.
+* Avoid moving too quickly.
+* Allow the LiDAR to observe different areas.
+* Return near previously visited areas when appropriate.
+
+This allows SLAM to build the environment map.
 
 ---
 
-# 💾 STEP 5 — Save the Map
+# 💾 TERMINAL 5 — Save Map
 
-Once the environment has been mapped, save the map:
+Once mapping is complete:
 
 ```bash
 ros2 run nav2_map_server map_saver_cli -f ~/ros2_ws/maps/my_map
 ```
 
-The generated map consists of the required map files for later navigation.
-
-The repository currently contains:
-
-```text
-worlds/maps/
-├── my_map.pgm
-└── my_map.yaml
-```
+This saves the map for later navigation.
 
 ---
 
-# 🧭 STEP 6 — Start Nav2
+# 🧭 TERMINAL 6 — Start Nav2
 
-After the map has been created and saved, start the navigation system.
-
-Open a terminal:
+After saving the map, open a terminal:
 
 ```bash
 cd ~/ros2_ws
 ```
 
-Source the workspace:
+Source:
 
 ```bash
 source install/setup.bash
@@ -665,130 +709,114 @@ Launch Nav2:
 ros2 launch four_wheel navigation.launch.py
 ```
 
-This starts the robot navigation system using the configured Nav2 parameters.
+Nav2 can then be used for autonomous navigation using the configured navigation system.
 
 ---
 
-# 🔄 Complete Mapping Workflow
+# 🔄 Mapping Sequence
 
 ```text
-┌─────────────────────┐
-│  Build ROS 2        │
-│  four_wheel package  │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│  Start Gazebo       │
-│  gazebo.launch.py   │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│  Start SLAM         │
-│  slam.launch.py     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│      RViz2          │
-│  Visualize /map     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│    Teleoperation    │
-│   Drive the Robot   │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   Generate Map      │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│      Save Map       │
-│ my_map.pgm/.yaml    │
-└─────────────────────┘
+1. Build Package
+       ↓
+2. Start Gazebo
+       ↓
+3. Start SLAM
+       ↓
+4. Start RViz
+       ↓
+5. Set Fixed Frame = map
+       ↓
+6. Add /map
+       ↓
+7. Start Teleoperation
+       ↓
+8. Drive Robot
+       ↓
+9. Build Map
+       ↓
+10. Save Map
 ```
 
 ---
 
-# 🧭 Complete Navigation Workflow
+# 🧭 Navigation Sequence
 
 ```text
              Saved Map
                  │
                  ▼
-       ┌─────────────────┐
-       │      Nav2       │
-       │ Navigation Stack│
-       └────────┬────────┘
-                │
-                ▼
-       ┌─────────────────┐
-       │ Localization &  │
-       │ Path Planning   │
-       └────────┬────────┘
-                │
-                ▼
-       ┌─────────────────┐
-       │   Controllers   │
-       └────────┬────────┘
-                │
-                ▼
-       ┌─────────────────┐
-       │ Four-Wheel Robot│
-       └─────────────────┘
+        ┌──────────────────┐
+        │      Nav2        │
+        └────────┬─────────┘
+                 │
+                 ▼
+        ┌──────────────────┐
+        │  Localization    │
+        └────────┬─────────┘
+                 │
+                 ▼
+        ┌──────────────────┐
+        │  Global Planner  │
+        └────────┬─────────┘
+                 │
+                 ▼
+        ┌──────────────────┐
+        │  Local Planner   │
+        └────────┬─────────┘
+                 │
+                 ▼
+        ┌──────────────────┐
+        │   Controller     │
+        └────────┬─────────┘
+                 │
+                 ▼
+        ┌──────────────────┐
+        │ Four-Wheel Robot │
+        └──────────────────┘
 ```
 
 ---
 
 # ⚙️ Configuration Files
 
-### Controller Configuration
+## Controller
 
 ```text
 config/my_controllers.yaml
 ```
 
-Contains controller configuration for the mobile robot.
+Used for robot controller configuration.
 
-### SLAM Configuration
+## SLAM
 
 ```text
 config/mapper_params_online_async.yaml
 ```
 
-Contains SLAM configuration parameters.
+Used for SLAM configuration.
 
-### Nav2 Configuration
+## Nav2
 
 ```text
 config/nav2_params.yaml
 ```
 
-Contains navigation stack configuration.
+Used for Nav2 navigation configuration.
 
 ---
 
 # 🚀 Launch Files
 
-The package provides the following launch files:
-
-| Launch File            | Purpose                                         |
-| ---------------------- | ----------------------------------------------- |
-| `gazebo.launch.py`     | Start Gazebo simulation                         |
-| `slam.launch.py`       | Start SLAM                                      |
-| `navigation.launch.py` | Start Nav2                                      |
-| `rsp.launch.py`        | Start robot state publisher / robot description |
+| File                   | Function                 |
+| ---------------------- | ------------------------ |
+| `gazebo.launch.py`     | Launch Gazebo simulation |
+| `slam.launch.py`       | Start SLAM               |
+| `navigation.launch.py` | Start Nav2               |
+| `rsp.launch.py`        | Robot State Publisher    |
 
 ---
 
-# 🖥️ RViz Configurations
-
-Two RViz configurations are included:
+# 🖥️ RViz Files
 
 ```text
 rviz/
@@ -796,54 +824,95 @@ rviz/
 └── rviz_config.rviz
 ```
 
-These configurations can be used for visualization during mapping and navigation.
+These configurations provide RViz visualization setups for the robot and navigation workflow.
+
+---
+
+# 🗺️ Map Files
+
+The repository contains:
+
+```text
+worlds/maps/
+├── my_map.pgm
+└── my_map.yaml
+```
+
+The `.pgm` file contains the occupancy-grid image and the `.yaml` file provides the associated map metadata.
 
 ---
 
 # 🧪 Testing
 
-The project can be tested progressively.
+The system can be tested in the following order:
 
-### Test 1 — Robot Simulation
+### 1. Gazebo
 
-Verify that the robot loads correctly in Gazebo.
+Verify:
 
-### Test 2 — LiDAR
+* Robot appears correctly.
+* Wheels respond to commands.
+* LiDAR is active.
 
-Verify that the LiDAR detects the surrounding environment.
+### 2. SLAM
 
-### Test 3 — SLAM
+Verify:
 
-Drive the robot around the environment and verify that `/map` is generated.
+* SLAM starts correctly.
+* LiDAR scans the environment.
+* `/map` is generated.
 
-### Test 4 — Map Saving
+### 3. RViz
 
-Save the generated map using:
+Verify:
 
-```bash
-ros2 run nav2_map_server map_saver_cli -f ~/ros2_ws/maps/my_map
+```text
+Fixed Frame → map
 ```
 
-### Test 5 — Navigation
+and:
 
-Launch Nav2 and verify autonomous navigation using the saved map.
+```text
+/map
+```
+
+is visible.
+
+### 4. Teleoperation
+
+Verify the robot responds to keyboard commands.
+
+### 5. Map Saving
+
+Verify that the map is saved successfully.
+
+### 6. Nav2
+
+Verify that the saved map can be used for autonomous navigation.
 
 ---
 
 # 🛠️ Development
 
-After modifying the package, rebuild it using:
+After modifying the package:
 
 ```bash
 cd ~/ros2_ws
+```
+
+Build:
+
+```bash
 colcon build --packages-select four_wheel
 ```
 
-Then source the workspace:
+Source:
 
 ```bash
 source install/setup.bash
 ```
+
+Then restart the required launch files.
 
 ---
 
@@ -853,59 +922,66 @@ This project provides practical experience with:
 
 * ROS 2
 * Mobile robotics
-* Differential-drive control
 * Four-wheel robot modeling
+* Differential-drive systems
 * URDF/Xacro
+* ROS 2 Control
 * Gazebo
 * LiDAR
 * SLAM
-* Mapping
+* Occupancy-grid mapping
 * RViz2
-* ROS 2 Control
 * Nav2
-* Autonomous navigation
+* Localization
 * Path planning
-* Robot localization
-* Teleoperation
-* Map generation and storage
+* Autonomous navigation
+* Robot teleoperation
+* Map generation
+* Map saving
 
 ---
 
 # 🔮 Future Improvements
 
-Possible improvements include:
-
 * Autonomous exploration
 * Improved localization
-* Multiple LiDAR sensors
-* Depth camera integration
-* Obstacle avoidance improvements
-* Dynamic obstacle handling
 * Waypoint navigation
-* Autonomous map exploration
-* Improved robot controller tuning
+* Dynamic obstacle avoidance
+* Multiple sensor integration
+* Depth camera integration
+* Improved controller tuning
 * Real hardware implementation
 * Hardware-in-the-loop testing
-* Integration with additional sensors
+* Autonomous map exploration
+* Multi-goal navigation
 
 ---
 
 # 📸 Demo
 
-Screenshots and videos can be added here.
+Recommended screenshots/videos for this repository:
 
-Recommended demonstrations:
+### 1. Gazebo
 
-1. Four-wheel robot in Gazebo
-2. LiDAR scan visualization
-3. SLAM-generated map
-4. RViz mapping view
-5. Saved occupancy map
-6. Nav2 navigation
-7. Autonomous robot movement
+Four-wheel robot operating in the simulated environment.
+
+### 2. LiDAR
+
+LiDAR scan around the robot.
+
+### 3. SLAM
+
+Live `/map` generation in RViz2.
+
+### 4. Completed Map
+
+Final occupancy-grid map.
+
+### 5. Nav2
+
+Robot navigating autonomously using the saved map.
 
 ---
-
 
 # 👨‍💻 Author
 
@@ -919,7 +995,7 @@ GitHub: **Rajvardhan16**
 
 # ⭐ Repository
 
-If you find this project useful for learning ROS 2, SLAM, Nav2, or mobile robotics, consider giving the repository a ⭐.
+If this project is useful for learning ROS 2, SLAM, Nav2, or mobile robotics, consider giving the repository a ⭐.
 
 **Repository:** `ros2-SLAM-Nav2-robot`
 
